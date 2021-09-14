@@ -36,6 +36,18 @@ createWindow = () => {
     ipc.on('window-close', function() {
         appWin.close();
     });
+
+    ipc.on('window-mini', function() {
+        appWin.minimize();
+    });
+
+    ipc.on('window-max', function() {
+        if (appWin.isMaximized()) {
+            appWin.restore();
+        } else {
+            appWin.maximize();
+        }
+    });
 }
 
 app.on("ready", createWindow);

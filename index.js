@@ -11,3 +11,13 @@ document.getElementById('close').addEventListener('click', () => {
     console.log('cerrando app');
     ipc.send('window-close');
 });
+
+document.getElementById('min').addEventListener('click', () => {
+    console.log('minimizando app');
+    ipc.send('window-mini');
+});
+
+document.getElementById('max').addEventListener('click', () => {
+    console.log('maximizando app');
+    ipc.send('window-max');
+});
