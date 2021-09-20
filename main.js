@@ -60,6 +60,7 @@ const fileUpload = require('express-fileupload');
 const multipart = require('connect-multiparty');
 var server = express()
 var db = require("./backend/database/database");
+const bcrypt = require('bcrypt');
 
 // Importamos las rutas
 var routes = require('./backend/url');
@@ -74,6 +75,8 @@ server.use(fileUpload());
 
 // Cargamos las rutas
 server.use('/apis', routes);
+
+
 
 // Server port
 var HTTP_PORT = 3000

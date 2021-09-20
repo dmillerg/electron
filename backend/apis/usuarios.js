@@ -16,6 +16,7 @@ function saveUsuario(req, res) {
     if (req.files) avatar = req.files.avatar;
 
     var roles = JSON.parse(body.roles);
+    console.log(roles);
 
     bcrypt.hash(password, 10, (err, encrypted) => {
         if (err) {
@@ -26,23 +27,34 @@ function saveUsuario(req, res) {
                 if (err)
                     return res.status(500).send({ message: error });
                 if (results) {
+                    conexion.all(`SELECT id FROM usuarios ORDER BY id DESC`, [], (err, resp) => {
+                        if (err) {
+                            console.log('Error asda', err)
+                        }
+                        console.log(resp)
+                        if (resp != undefined) {
+                            id = resp[0].id;
 
-                    id = results.insertId;
-                    let queryUserOnline = `INSERT INTO user_online(id, user_id, username, estado) VALUES (NULL, ${id}, "${user}","inactivo")`;
-                    conexion.all(queryUserOnline);
-                    for (let rol of roles) {
-                        query_rol = `INSERT INTO roles_usuarios(id, user_id, rol_id) VALUES (NULL, ${id}, ${rol.id})`;
-                        conexion.all(query, params, (error, results) => {
-                            if (error)
-                                console.log(error);
-                            if (results) {
-                                console.log("result", results);
-                            } else {
-                                // console.log('asda');
+                            let queryUserOnline = `INSERT INTO user_online(id, user_id, username, estado) VALUES (NULL, ${id}, "${user}","inactivo")`;
+                            conexion.all(queryUserOnline, [], (error2, result2) => {
+                                if (error2) console.log('error', error2);
+                                if (result2) console.log('resp', result2);
+                            });
+                            for (let rol of roles) {
+                                query_rol = `INSERT INTO roles_usuarios(id, user_id, rol_id) VALUES (NULL, ${id}, ${rol.id})`;
+                                conexion.all(query_rol, [], (error, results) => {
+                                    if (error)
+                                        console.log(error);
+                                    if (results) {
+                                        console.log("result", results);
+                                    } else {
+                                        // console.log('asda');
+                                    }
+                                });
                             }
-                        });
-                    }
-                    saveAvatar(avatar, user);
+                            saveAvatar(avatar, user);
+                        }
+                    });
                     return res.status(201).send({ message: 'agregado correctamente' });
                 } else {
                     return res.status(400).send({ message: 'Datos mal insertados' });

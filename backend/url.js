@@ -9,7 +9,7 @@ var roles_controller = require('./apis/roles');
 var login_controller = require('./apis/login');
 var document_controller = require('./apis/documents');
 // var managedb_controller = require('./apis/');
-// var superuser_controller = require('../database/superuser');
+var superuser_controller = require('./database/superuser');
 var historico_controller = require('./apis/historico');
 
 // Llamamos al router
@@ -53,9 +53,9 @@ api.post('/documents/:id', document_controller.updateDocument);
 //Rutas para manejar base de datos
 // api.get('/database', managedb_controller.createTables);
 
-// //Rutas para crear el primer superuser
-// api.get('/superuser', superuser_controller.createSuperUser);
-// api.post('/superuser', superuser_controller.saveSuperUsuario);
+//Rutas para crear el primer superuser
+api.get('/superuser', superuser_controller.createSuperUser);
+api.post('/superuser', superuser_controller.saveSuperUsuario);
 
 //Rutas para historico
 api.post('/userhistory', historico_controller.saveActionAPI);

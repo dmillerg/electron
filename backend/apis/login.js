@@ -11,7 +11,7 @@ function login(req, res) {
     let query = `SELECT usuarios.*, roles.rol_name, rp.is_all, rp.is_edit, rp.is_create, rp.is_delete, rp.is_read FROM usuarios INNER JOIN roles_usuarios ON usuarios.id=roles_usuarios.user_id INNER JOIN roles ON roles_usuarios.rol_id=roles.id INNER JOIN roles_permisos AS rp ON roles.id=rp.rol_id WHERE usuarios.user="${user}"`;
     conexion.all(query, params, (err, rows) => {
         // process rows here
-        console.log(rows[0].password);
+        console.log(rows);
     });
     conexion.all(query, params, (err, result) => {
         if (err) {
@@ -36,7 +36,7 @@ function login(req, res) {
 
 function userOnline(req, res) {
     let query = `SELECT * FROM user_online`;
-    conexion.all(query, [], (err, result) => {
+    conexion.run(query, [], function(err, result) {
         if (err) {
             return res.status(500).send({ message: 'Ocurrio error interno del servidor por favor pruebe mas tarde' });
         }
@@ -63,6 +63,7 @@ function logout(req, res) {
 }
 
 function hola(req, res) {
+
     return res.status(200).send({ 'message': 'asdasda' });
 }
 
