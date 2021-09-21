@@ -9,10 +9,6 @@ function login(req, res) {
     var pass = body.pass;
     let params = []
     let query = `SELECT usuarios.*, roles.rol_name, rp.is_all, rp.is_edit, rp.is_create, rp.is_delete, rp.is_read FROM usuarios INNER JOIN roles_usuarios ON usuarios.id=roles_usuarios.user_id INNER JOIN roles ON roles_usuarios.rol_id=roles.id INNER JOIN roles_permisos AS rp ON roles.id=rp.rol_id WHERE usuarios.user="${user}"`;
-    conexion.all(query, params, (err, rows) => {
-        // process rows here
-        console.log(rows);
-    });
     conexion.all(query, params, (err, result) => {
         if (err) {
             return res.status(500).send({ message: 'Error interno del servidor' });
@@ -36,11 +32,13 @@ function login(req, res) {
 
 function userOnline(req, res) {
     let query = `SELECT * FROM user_online`;
-    conexion.run(query, [], function(err, result) {
+    conexion.all(query, (err, result) => {
+        console.log('sadasd');
         if (err) {
             return res.status(500).send({ message: 'Ocurrio error interno del servidor por favor pruebe mas tarde' });
         }
         if (result) {
+            console.log(result);
             historico.saveAccion(result[0].user_id, 'Entro a la sesion de usuarios activos e inactivos');
             return res.status(200).send(result);
         }

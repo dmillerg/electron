@@ -12,6 +12,7 @@ createWindow = () => {
         height: 720,
         frame: false,
         title: "Angular and Electron",
+        icon: __dirname + '/ctc.png',
         // resizable: false,
         webPreferences: {
             nodeIntegration: true,
@@ -27,7 +28,7 @@ createWindow = () => {
 
     appWin.setMenu(null);
 
-    appWin.webContents.openDevTools();
+    // appWin.webContents.openDevTools();
 
     appWin.on("closed", () => {
         appWin = null;

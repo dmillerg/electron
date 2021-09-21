@@ -54,7 +54,6 @@ api.post('/documents/:id', document_controller.updateDocument);
 // api.get('/database', managedb_controller.createTables);
 
 //Rutas para crear el primer superuser
-api.get('/superuser', superuser_controller.createSuperUser);
 api.post('/superuser', superuser_controller.saveSuperUsuario);
 
 //Rutas para historico
