@@ -4,10 +4,14 @@
     left: 0;
     -webKit-app-region: drag;
     width: 91%;
+    color: white;
+    text-align: start;
     height: 32px;
     background-color: rgb(27, 27, 27);
     cursor: pointer;
     z-index: 999;
+    padding-left: 10px;
+    padding-top: 10px;
 }
 
 .btns {

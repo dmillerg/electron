@@ -21,17 +21,22 @@ function saveDocument(req, res) {
     var body = req.body;
     var no = body.no;
     var procedencia = body.procedencia;
-    var asunto = body.asunto;
+    var asunto = body.titulo;
     var fecha = body.fecha;
     var movimiento1 = body.movimiento1;
     var movimiento2 = body.movimiento2;
     var destruccion = body.destruccion;
-    var no_expediente = body.no_expediente;
+    var no_expediente = body.expediente;
     var observacion = body.observacion;
     var foto = { name: null };
     var foto_name = '';
     if (req.files) foto = req.files.foto;
-    foto_name = no + '.jpg';
+    if (foto.name == null) {
+        foto_name = 'ctc.png';
+    } else {
+        foto_name = no + '.jpg';
+    }
+    console.log('req.body *****', req.body);
     const parames = [no, procedencia.toString(), asunto.toString(), fecha.toString(), movimiento1.toString(), movimiento2.toString(), destruccion.toString(), no_expediente, observacion.toString(), foto_name.toString()];
     conexion.all(`INSERT INTO documento_limitado(id, no, procedencia, titulo, fecha, movimiento1, movimiento2, destruccion, expediente, observacion, imagen) VALUES (NULL,?,?,?,?,?,?,?,?,?,?)`, parames, (error) => {
         if (error)
@@ -47,7 +52,9 @@ function saveDocument(req, res) {
 function saveFoto(foto, title) {
     if (foto.name != null) {
         foto.mv(`./public/documento_limitado/${title}`, function(err) {
-            console.log('Error con la foto', err);
+            if (err) {
+                console.log('Error con la foto', err);
+            }
         });
     }
 }
@@ -106,25 +113,28 @@ function updateDocument(req, res) {
     var body = req.body;
     var no = body.no;
     var procedencia = body.procedencia;
-    var asunto = body.asunto;
+    var asunto = body.titulo;
     var fecha = body.fecha;
     var movimiento1 = body.movimiento1;
     var movimiento2 = body.movimiento2;
     var destruccion = body.destruccion;
-    var no_expediente = body.no_expediente;
+    var no_expediente = body.expediente;
     var observacion = body.observacion;
-
+    console.log(req.body, 'body')
     var foto = { name: null };
     if (req.files) foto = req.files.foto;
     console.log(foto.name, 'foto');
     // Buscamos por id y actualizamos el objeto y devolvemos el objeto actualizado
     var query = `UPDATE documento_limitado SET no=${no},procedencia="${procedencia}",titulo="${asunto}", fecha="${fecha}", movimiento1="${movimiento1}", movimiento2="${movimiento2}", destruccion="${destruccion}",expediente="${no_expediente}", observacion="${observacion}"`;
-    if (foto.name != null) query += `,imagen="${no}.jpg `;
+    console.log(query, 'query')
+    if (foto.name != null) query += `,imagen="${no}.jpg" `;
     query += `WHERE id = ${id}`
 
     conexion.all(query, [], (error, results) => {
-        if (error)
+        if (error) {
+            console.log(error, 'error');
             return res.status(500).send({ message: 'error en el servidor' });
+        }
         if (results) {
             if (foto.name != null) {
                 deleteFoto(no + '.jpg');
