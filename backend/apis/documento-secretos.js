@@ -37,10 +37,12 @@ function saveDocument(req, res) {
     if (req.files) foto = req.files.foto;
     foto_name = no + '.jpg';
     const parames = [no, lugar.toString(), reg_no.toString(), titulo.toString(), categoria.toString(), mat_no.toString(), folio_no.toString(), cant, no_ejemplar.toString(), cant_hojas.toString(), destruccion.toString(), destino.toString(), comp.toString(), foto_name];
-    conexion.all(`INSERT INTO documento_limitado(id, no, lugar, reg_no, titulo, categoria, mat_no, folio_no, cant, no_ejemplar, cant_hojas, destruccion, destino, comp, imagen) VALUES (NULL,?,?,?,?,?,?,?,?,?,?,?,?,?,?)`, parames, (error) => {
-        if (error)
+    console.log('parametros  ', parames);
+    conexion.all(`INSERT INTO documento_secreto(id, no, lugar, reg_no, titulo, categoria, mat_no, folio_no, cant, no_ejemplar, cant_hojas, destruccion, destino, comp, imagen) VALUES (NULL,?,?,?,?,?,?,?,?,?,?,?,?,?,?)`, parames, (error) => {
+        if (error) {
+            console.log('error', error);
             return res.status(500).send({ message: error });
-
+        }
         saveFoto(foto, foto_name);
         return res.status(201).send({ message: 'documento secreto  guardado correctamente' });
 
